@@ -225,16 +225,21 @@
                     photos: photosBase64
                 };
 
-                await fetch(WEB_APP_URL, {
+                const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
 
-                showMessage("تم إرسال البيانات بنجاح ✅", "bg-green-100 text-green-700");
-                form.reset();
-                document.getElementById('delegateName').disabled = true;
+                const result = await response.json();
+                
+                if (result.status === 'error') {
+                    showMessage(result.message, "bg-red-100 text-red-700");
+                } else {
+                    showMessage("تم إرسال البيانات بنجاح ✅", "bg-green-100 text-green-700");
+                    form.reset();
+                    document.getElementById('delegateName').disabled = true;
+                }
 
             } catch (error) {
                 console.error(error);
